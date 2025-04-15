@@ -58,6 +58,19 @@ const commands = [
     .setName('verify')
     .setDescription('Verify your Solana wallet token holdings to get special roles')
     .toJSON(),
+  new SlashCommandBuilder()
+    .setName("tip")
+    .setDescription("Tip a user with a specific amount in USDC")
+    .addUserOption((option) =>
+      option.setName("user").setDescription("The user to tip").setRequired(true)
+    )
+    .addNumberOption((option) =>
+      option
+        .setName("amount")
+        .setDescription("Amount in USDC to tip")
+        .setRequired(true)
+    )
+    .toJSON(),
 ];
 
 const rest = new REST({ version: '10' }).setToken(process.env.DISCORD_TOKEN);
@@ -68,6 +81,7 @@ app.use(express.json());
 
 const PORT = process.env.PORT || 3001;
 const CLIENT_URL = process.env.CLIENT_URL!;
+const CLIENT_TIP_URL = process.env.CLIENT_TIP_URL!;
 
 // Function to check token balance for a wallet
 async function checkTokenBalance(walletAddress: string): Promise<number> {
@@ -228,6 +242,32 @@ async function handleCommandInteraction(interaction: CommandInteraction) {
       content: '**Wallet Verification**\nSelect an option below to manage your wallet verification:',
       components: [row],
       ephemeral: true 
+    });
+  } else if (interaction.commandName === "tip") {
+    const mentionedUser = interaction.options.get("user")?.user;
+    const amount = interaction.options.get("amount")?.value;
+
+    if (!mentionedUser || !amount) {
+      await interaction.reply({
+        content: "User and amount is required.",
+        ephemeral: true,
+      });
+    }
+
+    const verificationLink = `${CLIENT_TIP_URL}/tip?receiver_user_id=${mentionedUser!.id}&receiver_username=${mentionedUser!.globalName}&amount=${amount}`;
+
+    const row = new ActionRowBuilder<ButtonBuilder>();
+    row.addComponents(
+      new ButtonBuilder()
+        .setLabel("Continue")
+        .setStyle(ButtonStyle.Link)
+        .setURL(verificationLink)
+    );
+
+    await interaction.reply({
+      content: `**You’re about to tip @${mentionedUser} with ${amount} USDC**\nClick the button below to complete the transaction on our secure website:`,
+      components: [row],
+      ephemeral: true,
     });
   }
 }
