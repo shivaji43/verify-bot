@@ -1,7 +1,7 @@
 import { Suspense } from "react";
 
 import { getVaultByUser } from "@/actions/vault";
-import { TipContent } from "@/components/tip-content";
+import { TipContent } from "@/app/tip/components/tip-content";
 
 type TipPagerops = {
   searchParams: Promise<{
@@ -17,7 +17,7 @@ export default async function TipPage(params: TipPagerops) {
   return (
     <main className="flex min-h-screen flex-col items-center justify-center p-4 md:p-24">
       <Suspense fallback={<div>Loading...</div>}>
-        <TipContent receiverVault={receiverVault?.id || null} />
+        <TipContent receiverVault={receiverVault?.id} />
       </Suspense>
     </main>
   );

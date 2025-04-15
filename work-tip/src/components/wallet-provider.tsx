@@ -9,6 +9,7 @@ import {
   WalletMultiButton,
 } from "@solana/wallet-adapter-react-ui";
 import "@solana/wallet-adapter-react-ui/styles.css";
+import { DiscordSignInButton } from "./discord-sign-in-button";
 
 export default function AppWalletProvider({
   children,
@@ -39,10 +40,7 @@ export default function AppWalletProvider({
             style={{ position: "absolute", top: 24, right: 30 }}
           >
             <WalletMultiButton />
-            <button className="w-full flex items-center gap-2 px-4 py-3 bg-violet-500 text-white rounded hover:bg-violet-600 cursor-pointer disabled:cursor-not-allowed disabled:bg-zinc-500">
-              <img src="/discord-white-icon.svg" className="size-4" />
-              Login with Discord
-            </button>
+            <DiscordSignInButton />
           </div>
           {children}
         </WalletModalProvider>

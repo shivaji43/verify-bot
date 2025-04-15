@@ -3,14 +3,12 @@
 import { useConnection, useWallet } from "@solana/wallet-adapter-react";
 
 import { formatWalletAddress } from "@/utils/wallet";
-import { getSerializedTransaction } from "@/actions/get-serialized-transaction";
 import { Transaction } from "@solana/web3.js";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { TOKEN_PROGRAM_ID } from "@solana/spl-token";
 import { useSearchParams } from "next/navigation";
-import { createVault, saveVault } from "@/actions/vault";
 import { execute } from "@/actions/execute";
-import { deposit } from "@/actions/deposit";
+import { deposit, depositInDatabase } from "@/actions/vault";
 import { toast } from "sonner";
 
 type TokenBalance = {
@@ -20,7 +18,7 @@ type TokenBalance = {
 };
 
 type TipContentProps = {
-  receiverVault: string | null;
+  receiverVault?: string;
 };
 
 const mintAddress = process.env.NEXT_PUBLIC_USDC_MINT_ADDRESS || "";
@@ -33,8 +31,7 @@ export function TipContent({ receiverVault }: TipContentProps) {
   const isFetchingRef = useRef(false);
 
   const { connection } = useConnection();
-  const { publicKey, connected, sendTransaction, signTransaction } =
-    useWallet();
+  const { publicKey, connected, signTransaction } = useWallet();
 
   const amount = Number(searchParams.get("amount") || 0);
   const receiverUsername = searchParams.get("receiver_username");
@@ -85,8 +82,6 @@ export function TipContent({ receiverVault }: TipContentProps) {
   }, [publicKey, connected, connection]);
 
   async function onSubmit() {
-    setLoading(true);
-    toast('Test')
     if (!connection || !publicKey || !signTransaction) {
       console.log("Please connect your wallet.");
       return;
@@ -97,42 +92,13 @@ export function TipContent({ receiverVault }: TipContentProps) {
     }
 
     try {
-      if (!receiverVault) {
-        // Create a vault and execute transaction
-        const vault = await createVault({
-          payer: publicKey.toString(),
-        });
-
-        if (!vault.serializedTransaction) {
-          return;
-        }
-
-        const signedTransaction = await signTransaction(
-          Transaction.from(Buffer.from(vault.serializedTransaction, "base64"))
-        );
-
-        await execute({
-          vaultId: vault.vaultId,
-          transactionId: vault.transactionId,
-          signedTransaction: signedTransaction.serialize().toString("base64"),
-        });
-
-        await saveVault({
-          userDiscordId: receiverDiscordId,
-          vaultId: vault.vaultId,
-        });
-      }
-
-      if (!receiverVault) {
-        throw new Error("receiverVault not found.");
-      }
-
-      // Transaction
+      setLoading(true);
       const depositRes = await deposit({
-        vaultId: receiverVault,
         payer: publicKey.toString(),
+        vaultId: receiverVault || undefined,
         strategy: "blockhash",
         network: "mainnet",
+        amount,
         token: {
           mintAddress,
           amount,
@@ -145,11 +111,13 @@ export function TipContent({ receiverVault }: TipContentProps) {
       const signedTransaction = await signTransaction(transaction);
 
       const { txHash } = await execute({
-        vaultId: receiverVault,
+        vaultId: depositRes.vaultId,
         transactionId: depositRes.transactionId,
         signedTransaction: signedTransaction.serialize().toString("base64"),
       });
-      
+
+      await depositInDatabase({ amount, vaultId: depositRes.vaultId });
+
       toast(
         <div className="flex flex-col gap-1">
           <span className="text-lg font-semibold">Transaction Confirmed</span>
@@ -165,10 +133,10 @@ export function TipContent({ receiverVault }: TipContentProps) {
         </div>,
         { duration: 10000 }
       );
-    } catch {
-      toast.error('An error occurred on transaction. Try again.')
-    } finally {
       setLoading(false);
+    } catch {
+      setLoading(false);
+      toast.error("An error occurred on transaction. Try again.");
     }
   }
 
