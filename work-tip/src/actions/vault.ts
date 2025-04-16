@@ -45,30 +45,49 @@ export const deposit = async (
 export const depositInDatabase = async ({
   amount,
   vaultId,
+  discordUserId,
 }: {
   amount: number;
   vaultId: string;
+  discordUserId: string;
 }) => {
   const supabase = await makeSupabase();
-  const { data } = await supabase
+  const { data, error } = await supabase
     .from("vaults")
     .select("vault_id, amount, decimals")
     .eq("vault_id", vaultId)
     .maybeSingle();
 
-  if (!data) throw new Error("Failed to get vault from database.");
+  if (error) throw new Error(`Failed to get the vault. ${error.message}`);
 
-  const dbAmount = data.amount;
-  const dbDecimals = data.decimals;
+  let dbAmount = 0;
+  let dbDecimals = 6;
+
+  if (!data) {
+    const { error: insertError } = await supabase.from("vaults").insert({
+      discord_user_id: discordUserId,
+      vault_id: vaultId,
+      amount: 0,
+      decimals: dbDecimals,
+    });
+
+    if (insertError)
+      throw new Error(`Error on vault creation: ${insertError.message}`);
+  } else {
+    dbAmount = data.amount ?? 0;
+    dbDecimals = data.decimals ?? 6;
+  }
 
   const rawAmount = Math.round(amount * Math.pow(10, dbDecimals));
   const newAmount = rawAmount + dbAmount;
 
-  await supabase
+  const { error: updateError } = await supabase
     .from("vaults")
     .update({ amount: newAmount })
-    .eq("vault_id", vaultId)
-    .maybeSingle();
+    .eq("vault_id", vaultId);
+
+  if (updateError)
+    throw new Error(`Error om vault update: ${updateError.message}`);
 
   revalidatePath("/vault");
 };

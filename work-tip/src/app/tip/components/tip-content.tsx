@@ -116,7 +116,11 @@ export function TipContent({ receiverVault }: TipContentProps) {
         signedTransaction: signedTransaction.serialize().toString("base64"),
       });
 
-      await depositInDatabase({ amount, vaultId: depositRes.vaultId });
+      await depositInDatabase({
+        amount,
+        vaultId: depositRes.vaultId,
+        discordUserId: receiverDiscordId,
+      });
 
       toast(
         <div className="flex flex-col gap-1">
