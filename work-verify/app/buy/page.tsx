@@ -21,8 +21,6 @@ export default function SwapPage() {
   const [quoteError, setQuoteError] = useState<string | null>(null);
 
   const buyAmount = REQUIRED_BALANCE * (10**TOKEN_DECIMALS);
-  console.log(buyAmount)
-  //const feeAccount = ''
 
   const getQuote = async (): Promise<QuoteResponse> => {
     try {
