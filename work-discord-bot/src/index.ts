@@ -253,11 +253,11 @@ async function handleCommandInteraction(interaction: CommandInteraction) {
         content: "User and amount is required.",
         ephemeral: true,
       });
+
       return;
     }
 
     const verificationLink = `${CLIENT_TIP_URL}/tip?receiver_user_id=${mentionedUser.id}&receiver_username=${mentionedUser.globalName}&amount=${amount}`;
-
     const row = new ActionRowBuilder<ButtonBuilder>();
     row.addComponents(
       new ButtonBuilder()
