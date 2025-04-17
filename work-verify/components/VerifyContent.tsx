@@ -9,7 +9,7 @@ import axios from 'axios';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Buffer } from 'buffer';
-import { SPECIFIC_TOKEN_MINT , REQUIRED_BALANCE , SOL_MINT , VERIFY_API_ENDPOINT , JUPITER_QUOTE_API , JUPITER_SWAP_API } from "@/utils/config";
+import { SPECIFIC_TOKEN_MINT , REQUIRED_BALANCE , SOL_MINT , VERIFY_API_ENDPOINT , JUPITER_QUOTE_API , JUPITER_SWAP_API } from '@/utils/config';
 import { TokenBalance , SignatureData , QuoteResponse , SwapResponse} from "@/utils/types";
 
 if (typeof window !== 'undefined' && typeof window.Buffer === 'undefined') {
