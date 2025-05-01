@@ -171,7 +171,7 @@ export function TipContent({ receiverVault }: TipContentProps) {
           senderTokenAccount,
           new PublicKey(tokenAccount),
           publicKey,
-          amount * 10 ** process.env.NEXT_PUBLIC_TOKEN_DECIMALS
+          amount * 10 ** Number(process.env.NEXT_PUBLIC_TOKEN_DECIMALS || 6)
         );
         const tnx = new Transaction().add(transferIx);
         const signature = await sendTransaction(tnx, connection);
