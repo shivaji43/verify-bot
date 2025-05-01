@@ -1,7 +1,10 @@
 "use client";
 
 import { useConnection, useWallet } from "@solana/wallet-adapter-react";
-import { createTransferInstruction, getAssociatedTokenAddress } from "@solana/spl-token";
+import {
+  createTransferInstruction,
+  getAssociatedTokenAddress,
+} from "@solana/spl-token";
 
 import { formatWalletAddress } from "@//utils/wallet";
 import { PublicKey, Transaction } from "@solana/web3.js";
@@ -38,7 +41,8 @@ export function TipContent({ receiverVault }: TipContentProps) {
   const isFetchingRef = useRef(false);
 
   const { connection } = useConnection();
-  const { publicKey, connected, signTransaction, sendTransaction } = useWallet();
+  const { publicKey, connected, signTransaction, sendTransaction } =
+    useWallet();
 
   const amount = Number(searchParams.get("amount") || 0);
   const receiverUsername = searchParams.get("receiver_username");
@@ -106,29 +110,32 @@ export function TipContent({ receiverVault }: TipContentProps) {
       setLoading(true);
       let tx;
 
-      if(!receiverVault) {
+      if (!receiverVault) {
         const depositRes = await deposit({
           payer: publicKey.toString(),
           vaultId: receiverVault || undefined,
           strategy: "blockhash",
-          network: process.env.NEXT_PUBLIC_NETWORK === "devnet"? "devnet" : "mainnet",
+          network:
+            process.env.NEXT_PUBLIC_NETWORK === "devnet" ? "devnet" : "mainnet",
           amount,
           token: {
             mintAddress,
             amount,
-            decimals: process.env.NEXT_PUBLIC_TOKEN_DECIMALS ? parseInt(process.env.NEXT_PUBLIC_TOKEN_DECIMALS): undefined,
+            decimals: process.env.NEXT_PUBLIC_TOKEN_DECIMALS
+              ? parseInt(process.env.NEXT_PUBLIC_TOKEN_DECIMALS)
+              : undefined,
             symbol: process.env.NEXT_PUBLIC_TOKEN_SYBMOL,
             name: process.env.NEXT_PUBLIC_TOKEN_NAME,
             logoUri: process.env.NEXT_PUBLIC_LOGO_URI,
           },
         });
-  
+
         const transaction = Transaction.from(
           Buffer.from(depositRes.serializedTransaction, "base64")
         );
 
         const signedTransaction = await signTransaction(transaction);
-  
+
         const { txHash } = await execute({
           vaultId: depositRes.vaultId,
           transactionId: depositRes.transactionId,
@@ -136,9 +143,9 @@ export function TipContent({ receiverVault }: TipContentProps) {
         });
 
         const userVault = await getVaultById(depositRes.vaultId);
-        if(!userVault) {
+        if (!userVault) {
           throw new Error("Vault not found");
-        };
+        }
         const tokenAccount = userVault.tokenAccount;
 
         await depositInDatabase({
@@ -164,7 +171,7 @@ export function TipContent({ receiverVault }: TipContentProps) {
           senderTokenAccount,
           new PublicKey(tokenAccount),
           publicKey,
-          amount * 10 ** 9,
+          amount * 10 ** process.env.NEXT_PUBLIC_TOKEN_DECIMALS
         );
         const tnx = new Transaction().add(transferIx);
         const signature = await sendTransaction(tnx, connection);
