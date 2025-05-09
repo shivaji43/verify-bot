@@ -7,7 +7,7 @@ export async function handleSendDirectMessage(req: Request, res: Response) {
   console.log(`${logPrefix} Request received.`);
 
   if (!message || !userId || !guildId) {
-    console.log(`${logPrefix} Missing required fields.`);
+    console.error(`${logPrefix} Missing required fields.`);
     res.status(400).json({
       success: false,
       message: "Missing required fields (message, userId, guildId).",
@@ -18,7 +18,7 @@ export async function handleSendDirectMessage(req: Request, res: Response) {
   try {
     const guild = client.guilds.cache.get(guildId);
     if (!guild) {
-      console.log(`${logPrefix} Guild ${guildId} not found.`);
+      console.error(`${logPrefix} Guild ${guildId} not found.`);
       res.status(404).json({
         success: false,
         message: "Bot is not in the specified server context for this request.",
@@ -40,7 +40,7 @@ export async function handleSendDirectMessage(req: Request, res: Response) {
       } catch (dmError: any) {
         console.error(`${logPrefix} API Error sending DM:`, dmError);
         if (dmError.code === 50007) {
-          console.log(`${logPrefix} Cannot send DM (user settings or block).`);
+          console.error(`${logPrefix} Cannot send DM (user settings or block).`);
           res.status(403).json({
             success: false,
             message:
@@ -57,7 +57,7 @@ export async function handleSendDirectMessage(req: Request, res: Response) {
         }
       }
     } else {
-      console.log(`${logPrefix} User ${userId} not found in guild ${guildId}.`);
+      console.error(`${logPrefix} User ${userId} not found in guild ${guildId}.`);
       res.status(404).json({
         success: false,
         message: "User not found in the specified server.",

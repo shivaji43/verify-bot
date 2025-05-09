@@ -47,6 +47,7 @@ export function TipContent({ receiverVault }: TipContentProps) {
   const amount = Number(searchParams.get("amount") || 0);
   const receiverUsername = searchParams.get("receiver_username");
   const receiverDiscordId = searchParams.get("receiver_user_id");
+  const serverId = searchParams.get("server_id")
 
   const hasBalance = useCallback(() => {
     const balanceAmount = Number(tokenBalance?.amount) || 0;
@@ -206,12 +207,14 @@ export function TipContent({ receiverVault }: TipContentProps) {
           amount,
           receiverId: receiverDiscordId,
           senderId: session.user.id,
+          serverId:serverId,
         });
         await sendDiscordTipDirectMessage({
           amount,
           senderId: session.user.id,
           receiverId: receiverDiscordId,
           claimUrl: window?.location?.origin,
+          serverId:serverId
         });
       } catch {
         console.log("Error sending Discord message");

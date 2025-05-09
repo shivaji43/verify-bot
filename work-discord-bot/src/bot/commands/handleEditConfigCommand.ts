@@ -62,6 +62,7 @@ import {
       const newTokenSymbolInput = interaction.options.getString("token_symbol");
       const newTokenDecimalsInput =
         interaction.options.getInteger("token_decimals");
+      const newChannelId = interaction.options.getString("channel_id")
   
       const updateData: any = {};
   
@@ -168,6 +169,19 @@ import {
           changes.push(`- Token Decimals: ${newTokenDecimalsInput}`);
         } else {
           await interaction.editReply("Token decimals must be between 0 and 18.");
+          validationError = true;
+        }
+      }
+      if (newChannelId !== null && !validationError) {
+        if (/^\d+$/.test(newChannelId)) {
+          updateData.channel_id = newChannelId;
+          changes.push(`- Announcement Channel: <#${newChannelId}>`);
+        } else if (newChannelId.toLowerCase() === "remove") {
+          updateData.channel_id = null;
+          changes.push(`- Announcement Channel: *(Removed)*`);
+        }
+        else {
+          await interaction.editReply("Invalid Channel ID format provided. It should be a numerical ID, or 'remove' to clear it.");
           validationError = true;
         }
       }

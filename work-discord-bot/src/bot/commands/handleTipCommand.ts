@@ -28,13 +28,13 @@ export async function handleTipCommand(interaction: CommandInteraction) {
     });
     return;
   }
-
+  const server_id = interaction.guildId;
   const receiverUsername = mentionedUser.globalName || mentionedUser.username;
   const displayUsername = mentionedUser.globalName
     ? `@${mentionedUser.globalName}`
     : mentionedUser.username;
   const encodedReceiverUsername = encodeURIComponent(receiverUsername);
-  const tipLink = `${CLIENT_URL}/tip?receiver_user_id=${mentionedUser.id}&receiver_username=${encodedReceiverUsername}&amount=${amount}`;
+  const tipLink = `${CLIENT_URL}/tip?receiver_user_id=${mentionedUser.id}&receiver_username=${encodedReceiverUsername}&amount=${amount}&server_id=${server_id}`;
 
   const row = new ActionRowBuilder<ButtonBuilder>().addComponents(
     new ButtonBuilder()

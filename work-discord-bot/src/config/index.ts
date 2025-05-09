@@ -78,6 +78,12 @@ export const commands = [
         .setMinValue(0)
         .setMaxValue(18)
     )
+    .addStringOption((option)=>
+      option
+        .setName("channel_id")
+        .setDescription("Channel Id to show USDC tips given to users")
+        .setRequired(false)
+    )
     .setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
     .setDMPermission(false)
     .toJSON(),
@@ -122,6 +128,12 @@ export const commands = [
         .setRequired(false)
         .setMinValue(0)
         .setMaxValue(18)
+    )
+    .addStringOption((option)=>
+      option
+        .setName("channel_id")
+        .setDescription("Channel Id to show USDC tips given to users")
+        .setRequired(false)
     )
     .setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
     .setDMPermission(false)

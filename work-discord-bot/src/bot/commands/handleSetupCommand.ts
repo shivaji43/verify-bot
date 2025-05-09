@@ -35,6 +35,7 @@ import {
         "https://api.mainnet-beta.solana.com";
       const tokenSymbol = interaction.options.getString("token_symbol");
       const tokenDecimalsInput = interaction.options.getInteger("token_decimals");
+      const channel_id = interaction.options.getString("channel_id",true);
   
       try {
         new PublicKey(tokenAddress);
@@ -109,7 +110,8 @@ import {
         admin_user_id: interaction.user.id,
         token_symbol: tokenSymbol,
         token_decimals: tokenDecimals,
-        setup_complete: true
+        setup_complete: true,
+        channel_id:channel_id
       };
   
       const success = await createOrUpdateServerConfig(serverConfig);
