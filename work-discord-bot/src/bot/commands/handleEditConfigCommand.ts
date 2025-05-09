@@ -62,7 +62,7 @@ import {
       const newTokenSymbolInput = interaction.options.getString("token_symbol");
       const newTokenDecimalsInput =
         interaction.options.getInteger("token_decimals");
-      const newChannelId = interaction.options.getString("channel_id")
+      const newChannelId = interaction.options.getChannel("channel_id")
   
       const updateData: any = {};
   
@@ -173,17 +173,8 @@ import {
         }
       }
       if (newChannelId !== null && !validationError) {
-        if (/^\d+$/.test(newChannelId)) {
-          updateData.channel_id = newChannelId;
-          changes.push(`- Announcement Channel: <#${newChannelId}>`);
-        } else if (newChannelId.toLowerCase() === "remove") {
-          updateData.channel_id = null;
-          changes.push(`- Announcement Channel: *(Removed)*`);
-        }
-        else {
-          await interaction.editReply("Invalid Channel ID format provided. It should be a numerical ID, or 'remove' to clear it.");
-          validationError = true;
-        }
+        updateData.channel_id = newChannelId.id;
+        changes.push(`- Announcement Channel: <#${newChannelId.id}> (${newChannelId.name})`);
       }
   
       if (validationError) {

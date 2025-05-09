@@ -78,9 +78,9 @@ export const commands = [
         .setMinValue(0)
         .setMaxValue(18)
     )
-    .addStringOption((option)=>
+    .addChannelOption((option)=>
       option
-        .setName("channel_id")
+        .setName("channel")
         .setDescription("Channel Id to show USDC tips given to users")
         .setRequired(false)
     )
@@ -129,9 +129,9 @@ export const commands = [
         .setMinValue(0)
         .setMaxValue(18)
     )
-    .addStringOption((option)=>
+    .addChannelOption((option)=>
       option
-        .setName("channel_id")
+        .setName("channel")
         .setDescription("Channel Id to show USDC tips given to users")
         .setRequired(false)
     )
