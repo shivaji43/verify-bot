@@ -62,6 +62,7 @@ import {
       const newTokenSymbolInput = interaction.options.getString("token_symbol");
       const newTokenDecimalsInput =
         interaction.options.getInteger("token_decimals");
+      const newChannelId = interaction.options.getChannel("channel_id")
   
       const updateData: any = {};
   
@@ -170,6 +171,10 @@ import {
           await interaction.editReply("Token decimals must be between 0 and 18.");
           validationError = true;
         }
+      }
+      if (newChannelId !== null && !validationError) {
+        updateData.channel_id = newChannelId.id;
+        changes.push(`- Announcement Channel: <#${newChannelId.id}> (${newChannelId.name})`);
       }
   
       if (validationError) {
