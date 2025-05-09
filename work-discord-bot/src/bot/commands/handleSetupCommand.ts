@@ -35,7 +35,7 @@ import {
         "https://api.mainnet-beta.solana.com";
       const tokenSymbol = interaction.options.getString("token_symbol");
       const tokenDecimalsInput = interaction.options.getInteger("token_decimals");
-      const channel_id = interaction.options.getChannel("channel_id",true);
+      const channel_id = interaction.options.getChannel("channel",true);
   
       try {
         new PublicKey(tokenAddress);

@@ -62,7 +62,7 @@ import {
       const newTokenSymbolInput = interaction.options.getString("token_symbol");
       const newTokenDecimalsInput =
         interaction.options.getInteger("token_decimals");
-      const newChannelId = interaction.options.getChannel("channel_id")
+      const newChannelId = interaction.options.getChannel("channel")
   
       const updateData: any = {};
   
