@@ -70,7 +70,7 @@ export const getAmountByUser = async (userDiscordId: string) => {
     .maybeSingle();
 
   if(!data || !data.token_account){
-    throw new Error("No vault found for this user");
+    return;
   }
 
   const connection = new Connection(
