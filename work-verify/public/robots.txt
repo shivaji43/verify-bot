@@ -1,0 +1,16 @@
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://verify-bot.gib.work/sitemap.xml
+
+# Disallow sensitive areas
+Disallow: /api/
+Disallow: /_next/
+Disallow: /scripts/
+
+# Allow important pages
+Allow: /
+Allow: /vault/
+Allow: /buy/
+Allow: /tip/ 
