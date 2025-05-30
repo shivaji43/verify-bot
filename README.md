@@ -17,7 +17,7 @@ This project allows Discord server administrators to create token-gated roles, w
 
 ## Live Demo
 
-The web application is deployed at: [https://verify-bot-zeta.vercel.app/](https://verify-bot-zeta.vercel.app/)
+The web application is deployed at: [https://verify-bot.gib.work/](https://verify-bot.gib.work/)
 
 Note: You'll need a verification code from the Discord bot to use the application.
 
