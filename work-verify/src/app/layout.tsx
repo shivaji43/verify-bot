@@ -40,7 +40,7 @@ export const metadata: Metadata = {
     siteName: "Verify Bot",
     images: [
       {
-        url: "/verify-bot-profile.svg",
+        url: `${process.env.NEXT_PUBLIC_VERIFY_APP_URL}/api/og`,
         width: 1200,
         height: 630,
         alt: "Verify Bot Logo",
