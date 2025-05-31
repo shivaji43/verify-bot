@@ -41,7 +41,7 @@ export async function GET(request: NextRequest) {
             gap: "60px",
             backgroundColor: "white",
             borderRadius: "24px",
-            padding: "60px 80px",
+            padding: "100px 120px",
             boxShadow:
               "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)",
           }}
@@ -49,8 +49,8 @@ export async function GET(request: NextRequest) {
           {/* Bot Image */}
           <img
             src={imageUrl.toString()}
-            width={180}
-            height={180}
+            width={220}
+            height={220}
             tw="rounded-xl"
           />
 
@@ -77,7 +77,7 @@ export async function GET(request: NextRequest) {
             </div>
             <div
               style={{
-                fontSize: "18px",
+                fontSize: "24px",
                 color: "#475569",
                 marginBottom: "8px",
               }}
@@ -86,21 +86,21 @@ export async function GET(request: NextRequest) {
             </div>
             <div
               style={{
-                fontSize: "18px",
+                fontSize: "24px",
                 color: "#475569",
                 marginBottom: "8px",
               }}
             >
               📦 github.com/gibwork/verify-bot
             </div>
-            <div style={{ fontSize: "18px", color: "#475569" }}>
+            <div style={{ fontSize: "24px", color: "#475569" }}>
               ⚡ Use /verify in Discord
             </div>
           </div>
         </div>
 
         {/* Bottom tagline */}
-        <div style={{ fontSize: "16px", color: "#94a3b8", marginTop: "24px" }}>
+        <div style={{ fontSize: "22px", color: "#94a3b8", marginTop: "24px" }}>
           Secure • Automated • Seamless
         </div>
       </div>
