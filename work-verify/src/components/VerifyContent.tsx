@@ -923,11 +923,11 @@ export default function VerifyContent() {
       />
 
       <div className="text-center mb-8">
-        <h1 className="text-2xl font-bold">
+        <h1 className="text-2xl text-primary font-bold">
           Discord Role Verification
         </h1>
         {serverConfig.serverName && (
-          <p className="text-lg text-gray-700">
+          <p className="text-lg text-primary ">
             For Server: {serverConfig.serverName}
           </p>
         )}
