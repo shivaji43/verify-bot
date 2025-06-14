@@ -1,54 +1,68 @@
-"use client"
-import type React from "react"
-import { useMemo, useState, useEffect, useRef } from "react"
-import { ConnectionProvider, WalletProvider } from "@solana/wallet-adapter-react"
-import { WalletModalProvider, WalletMultiButton } from "@solana/wallet-adapter-react-ui"
-import "@solana/wallet-adapter-react-ui/styles.css"
-import { DiscordSignInButton } from "./discord-sign-in-button"
-import { LedgerWalletAdapter, PhantomWalletAdapter, SolflareWalletAdapter } from "@solana/wallet-adapter-wallets"
-import { ThemeProvider } from "next-themes"
-import { ThemeToggle } from "./theme-toggle"
+"use client";
+import type React from "react";
+import { useMemo, useState, useEffect, useRef } from "react";
+import {
+  ConnectionProvider,
+  WalletProvider,
+} from "@solana/wallet-adapter-react";
+import {
+  WalletModalProvider,
+  WalletMultiButton,
+} from "@solana/wallet-adapter-react-ui";
+import "@solana/wallet-adapter-react-ui/styles.css";
+import { DiscordSignInButton } from "./discord-sign-in-button";
+import {
+  LedgerWalletAdapter,
+  PhantomWalletAdapter,
+  SolflareWalletAdapter,
+} from "@solana/wallet-adapter-wallets";
+import { ThemeProvider } from "next-themes";
+import { ThemeToggle } from "./theme-toggle";
 
 export default function AppWalletProvider({
   children,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
-  const [endpointUrl, setEndpointUrl] = useState<string>("")
-  const [isMenuOpen, setIsMenuOpen] = useState(false)
-  const menuRef = useRef<HTMLDivElement>(null)
+  const [endpointUrl, setEndpointUrl] = useState<string>("");
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
-      const origin = window.location.origin
-      setEndpointUrl(`${origin}/api/rpc`)
+      const origin = window.location.origin;
+      setEndpointUrl(`${origin}/api/rpc`);
     }
-  }, [])
+  }, []);
 
   // Close menu when clicking outside
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
-        setIsMenuOpen(false)
+        setIsMenuOpen(false);
       }
     }
 
     if (isMenuOpen) {
-      document.addEventListener("mousedown", handleClickOutside)
+      document.addEventListener("mousedown", handleClickOutside);
     }
 
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside)
-    }
-  }, [isMenuOpen])
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isMenuOpen]);
 
   const wallets = useMemo(
-    () => [new PhantomWalletAdapter(), new SolflareWalletAdapter(), new LedgerWalletAdapter()],
-    [],
-  )
+    () => [
+      new PhantomWalletAdapter(),
+      new SolflareWalletAdapter(),
+      new LedgerWalletAdapter(),
+    ],
+    []
+  );
 
   if (!endpointUrl) {
-    return null
+    return null;
   }
 
   return (
@@ -73,11 +87,26 @@ export default function AppWalletProvider({
                   className="p-2 bg-gray-800 dark:bg-gray-700 text-white rounded-md hover:bg-gray-700 dark:hover:bg-gray-600 transition-colors"
                   aria-label="Toggle menu"
                 >
-                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg
+                    className="w-6 h-6"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
                     {isMenuOpen ? (
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M6 18L18 6M6 6l12 12"
+                      />
                     ) : (
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M4 6h16M4 12h16M4 18h16"
+                      />
                     )}
                   </svg>
                 </button>
@@ -117,5 +146,5 @@ export default function AppWalletProvider({
         </WalletProvider>
       </ConnectionProvider>
     </ThemeProvider>
-  )
+  );
 }
