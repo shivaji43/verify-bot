@@ -36,7 +36,6 @@ export const ErrorDisplay: FC<ErrorDisplayProps> = ({ missingParams }) => {
         <h3 className="font-semibold text-lg mb-3">What can I do?</h3>
         <ul className="space-y-2">
           <li>• Return to Discord and use the correct tip command</li>
-          <li>• Contact the person who sent you this link</li>
           <li>
             • <Link href="/docs" className="text-primary underline">
                 View documentation
